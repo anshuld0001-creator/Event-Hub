@@ -1,0 +1,9 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Manage Users - EventHub{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><h1 class="fw-bold">Manage Users</h1></div>
+<form class="mb-3"><div class="input-group"><input name="q" value="{{ q }}" class="form-control" placeholder="Search username, name or email..."><button class="btn btn-outline-primary">Search</button></div></form>
+<div class="card shadow-sm"><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr></thead><tbody>
+{% for u in users %}<tr><td><strong>{{ u.username }}</strong><br><span class="small text-secondary">{{ u.first_name }} {{ u.last_name }}</span></td><td>{{ u.email|default:"-" }}</td><td>{% if u.is_superuser %}Superuser{% elif u.is_staff %}Staff{% else %}User{% endif %}</td><td>{% if u.is_active %}<span class="badge text-bg-success">Active</span>{% else %}<span class="badge text-bg-secondary">Inactive</span>{% endif %}</td><td>{% if u != user %}<form method="post" action="{% url 'admin_user_toggle' u.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-dark">{{ u.is_active|yesno:"Deactivate,Activate" }}</button></form>{% else %}<span class="small text-secondary">Current admin</span>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

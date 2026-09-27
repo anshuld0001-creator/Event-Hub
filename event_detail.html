@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }} - EventHub{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row g-5">
+    <div class="col-lg-8">
+      <span class="badge text-bg-primary mb-3">{{ event.category|default:"General" }}</span>
+      <h1 class="display-5 fw-bold">{{ event.title }}</h1>
+      <p class="lead text-secondary">{{ event.description }}</p>
+      <hr>
+      <div class="row g-3 my-3">
+        <div class="col-md-6"><div class="info-box"><strong>📅 Date</strong><br>{{ event.event_date|date:"l, d F Y" }}</div></div>
+        <div class="col-md-6"><div class="info-box"><strong>⏰ Time</strong><br>{{ event.event_time|time:"g:i A" }}</div></div>
+        <div class="col-md-6"><div class="info-box"><strong>📍 Venue</strong><br>{{ event.venue }}</div></div>
+        <div class="col-md-6"><div class="info-box"><strong>👥 Availability</strong><br>{{ event.seats_left }} of {{ event.capacity }} seats left</div></div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card shadow-sm sticky-lg-top" style="top:90px">
+        <div class="card-body p-4">
+          <h4 class="fw-bold">Registration</h4>
+          {% if booking %}
+            <div class="alert alert-info">You already have a booking with status <strong>{{ booking.status|title }}</strong>.</div>
+            <a href="{% url 'my_bookings' %}" class="btn btn-dark w-100">View My Bookings</a>
+          {% elif event.seats_left <= 0 %}
+            <div class="alert alert-danger">This event is fully booked.</div>
+          {% elif user.is_authenticated %}
+            <form method="post" action="{% url 'book_event' event.pk %}">
+              {% csrf_token %}
+              <button class="btn btn-primary btn-lg w-100">Register / Book Event</button>
+            </form>
+          {% else %}
+            <p class="text-secondary">Login or create an account to register.</p>
+            <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary w-100 mb-2">Login to Register</a>
+            <a href="{% url 'register' %}" class="btn btn-outline-primary w-100">Create Account</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

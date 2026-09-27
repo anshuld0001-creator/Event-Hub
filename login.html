@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Login - EventHub{% endblock %}
+{% block content %}
+<div class="auth-wrap"><div class="card auth-card shadow-sm"><div class="card-body p-4">
+  <h2 class="fw-bold">Welcome Back</h2><p class="text-secondary">Login to manage your events and bookings.</p>
+  <form method="post">{% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3"><label class="form-label">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}</div>
+    {% endfor %}
+    <button class="btn btn-primary w-100 btn-lg">Login</button>
+  </form>
+  <p class="text-center mt-3 mb-0">Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+</div></div></div>
+{% endblock %}

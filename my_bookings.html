@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}My Bookings - EventHub{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="fw-bold mb-1">My Bookings</h1>
+  <p class="text-secondary mb-4">Track registrations and cancel bookings when needed.</p>
+  <div class="row g-3">
+  {% for booking in bookings %}
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between gap-3">
+            <div>
+              <span class="badge {% if booking.status == 'approved' %}text-bg-success{% elif booking.status == 'rejected' %}text-bg-danger{% elif booking.status == 'cancelled' %}text-bg-secondary{% else %}text-bg-warning{% endif %}">{{ booking.status|title }}</span>
+              <h5 class="fw-bold mt-2">{{ booking.event.title }}</h5>
+            </div>
+            <a href="{% url 'event_detail' booking.event.pk %}" class="btn btn-sm btn-outline-primary">Details</a>
+          </div>
+          <div class="small text-secondary mb-3">📅 {{ booking.event.event_date|date:"d M Y" }} · 📍 {{ booking.event.venue }}</div>
+          {% if booking.status != "cancelled" and booking.status != "rejected" %}
+          <form method="post" action="{% url 'cancel_booking' booking.pk %}" onsubmit="return confirm('Cancel this booking?');">
+            {% csrf_token %}<button class="btn btn-outline-danger btn-sm">Cancel Booking</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-12"><div class="empty-state"><div class="display-4">🎟️</div><h4>No bookings yet</h4><a href="{% url 'event_list' %}" class="btn btn-primary">Explore Events</a></div></div>
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}

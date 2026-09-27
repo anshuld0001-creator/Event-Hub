@@ -1,0 +1,8 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Confirm Delete - EventHub{% endblock %}
+{% block admin_content %}
+<div class="row justify-content-center"><div class="col-md-6"><div class="card shadow-sm"><div class="card-body p-4">
+<h3 class="fw-bold">Confirm Delete</h3><p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
+<form method="post">{% csrf_token %}<button class="btn btn-danger">Yes, Delete</button><a href="{% url back_url %}" class="btn btn-outline-secondary ms-2">Cancel</a></form>
+</div></div></div></div>
+{% endblock %}

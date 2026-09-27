@@ -1,0 +1,18 @@
+{% extends "adminpanel/base.html" %}
+{% block title %}Admin Dashboard - EventHub{% endblock %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><div><h1 class="fw-bold">Dashboard</h1><p class="text-secondary mb-0">Overview of your event platform.</p></div><a href="{% url 'admin_event_create' %}" class="btn btn-primary">+ Add Event</a></div>
+<div class="row g-3 mb-4">
+<div class="col-md-6 col-xl-3"><div class="stat-card"><span>🎟️</span><small>Total Events</small><h2>{{ total_events }}</h2></div></div>
+<div class="col-md-6 col-xl-3"><div class="stat-card"><span>👥</span><small>Total Users</small><h2>{{ total_users }}</h2></div></div>
+<div class="col-md-6 col-xl-3"><div class="stat-card"><span>📋</span><small>Total Bookings</small><h2>{{ total_bookings }}</h2></div></div>
+<div class="col-md-6 col-xl-3"><div class="stat-card"><span>⏳</span><small>Pending</small><h2>{{ pending_bookings }}</h2></div></div>
+</div>
+<div class="card shadow-sm"><div class="card-body">
+<h5 class="fw-bold">Recent Bookings</h5>
+<div class="table-responsive"><table class="table align-middle">
+<thead><tr><th>User</th><th>Event</th><th>Status</th><th>Date</th></tr></thead>
+<tbody>{% for b in recent_bookings %}<tr><td>{{ b.user.username }}</td><td>{{ b.event.title }}</td><td><span class="badge text-bg-secondary">{{ b.status }}</span></td><td>{{ b.booked_at|date:"d M Y H:i" }}</td></tr>{% empty %}<tr><td colspan="4">No bookings yet.</td></tr>{% endfor %}</tbody>
+</table></div>
+</div></div>
+{% endblock %}
